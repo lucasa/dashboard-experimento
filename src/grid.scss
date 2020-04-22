@@ -1,0 +1,10 @@
+:global {
+  .react-grid-item {
+    box-sizing: border-box;
+
+    &:not(.react-grid-placeholder) {
+      background: #fff;
+      border: 1px solid #ccc;
+    }
+  }
+}

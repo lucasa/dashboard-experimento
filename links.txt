@@ -1,0 +1,10 @@
+
+https://tympanus.net/codrops/2015/04/15/grid-item-animation-layout/
+
+https://github.com/codrops/ExpandingGridItemAnimation/
+
+https://tympanus.net/Development/GridLayoutMotion/
+
+https://tympanus.net/Development/GridMenu/index.html
+
+https://github.com/urlDev/react-techshop
