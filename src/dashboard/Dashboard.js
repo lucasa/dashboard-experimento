@@ -3,6 +3,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import StackGrid, { transitions, easings } from "react-stack-grid";
 import DemoControl from "../instagram/DemoControl";
 import Widget from "./components/Widget";
@@ -14,32 +15,36 @@ import "../instagram/style.css";
 const defaultContent = [
   {
     title: "A video...",
-    url: "https://www.youtube.com/watch?v=OslN5mxWZi8",
     path: "./VideoCard",
-    tag: "VideoCard"
+    tag: "VideoCard",
+    properties: { url: "https://www.youtube.com/watch?v=OslN5mxWZi8" }
   },
   {
     title: "gfycat",
-    url: "https://gfycat.com/uniquejollyhammerkop-elijah-wood",
     path: "./EmbedCard",
-    tag: "EmbedCard"
+    tag: "EmbedCard",
+    properties: { url: "https://gfycat.com/uniquejollyhammerkop-elijah-wood" }
   },
   {
     title: "twitter",
-    url: "https://twitter.com/PaolaCarosella/status/1250593587684954115",
     path: "./EmbedCard",
-    tag: "EmbedCard"
+    tag: "EmbedCard",
+    properties: {
+      url: "https://twitter.com/PaolaCarosella/status/1250593587684954115"
+    }
   },
   {
     title: "maps",
-    url:
-      "https://www.google.com/maps/place/Sharksushi/@-30.0714187,-51.2581439,13z/data=!4m8!1m2!2m1!1sshark+sushi!3m4!1s0x95197810db64f825:0x2392d6944dcb471e!8m2!3d-30.0534025!4d-51.1921381",
     path: "./EmbedCard",
-    tag: "EmbedCard"
+    tag: "EmbedCard",
+    properties: {
+      url:
+        "https://www.google.com/maps/place/Sharksushi/@-30.0714187,-51.2581439,13z/data=!4m8!1m2!2m1!1sshark+sushi!3m4!1s0x95197810db64f825:0x2392d6944dcb471e!8m2!3d-30.0534025!4d-51.1921381"
+    }
   }
 ];
 
-export default class Dashboard extends Component {
+class Dashboard extends Component {
   constructor(props) {
     super(props);
 
@@ -64,7 +69,7 @@ export default class Dashboard extends Component {
       newItems[j] = t;
     }
 
-    this.setState({ items: newItems });
+    this.setState({ content: newItems });
   };
 
   prependItem = item => {
@@ -153,16 +158,14 @@ export default class Dashboard extends Component {
           }}
         >
           {content.map(config => {
-            let { title, tag, path, ...childProps } = config;
-            console.log("config", config);
-            console.log("childProps", childProps);
+            let { title, tag, path, properties } = config;
             return (
               <Widget
                 key={title}
                 title={title}
                 tag={tag}
                 path={path}
-                childProps={childProps}
+                childProps={properties}
               />
             );
           })}
@@ -171,3 +174,16 @@ export default class Dashboard extends Component {
     );
   }
 }
+
+Dashboard.propTypes = {
+  content: PropTypes.arrayOf(
+    PropTypes.shape({
+      title: PropTypes.string.isRequired,
+      path: PropTypes.string.isRequired,
+      tag: PropTypes.string.isRequired,
+      properties: PropTypes.object.isRequired
+    })
+  )
+};
+
+export default Dashboard;

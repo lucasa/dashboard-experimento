@@ -1,6 +1,7 @@
 import React from "react";
 import Embed from "react-embed";
 import BaseCard from "./BaseCard";
+import BorderWrapper from "react-border-wrapper";
 
 export class EmbedCard extends BaseCard {
   constructor(props) {
