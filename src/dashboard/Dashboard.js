@@ -15,8 +15,8 @@ const defaultContent = [
   {
     title: "A video...",
     url: "https://www.youtube.com/watch?v=OslN5mxWZi8",
-    path: "./EmbedCard",
-    tag: "EmbedCard"
+    path: "./VideoCard",
+    tag: "VideoCard"
   },
   {
     title: "gfycat",

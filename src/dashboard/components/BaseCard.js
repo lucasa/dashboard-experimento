@@ -4,8 +4,14 @@ export class BaseCard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      initialProps: props
+      defaultProps: props
     };
+
+    this.getBaseState = this.getBaseState.bind(this);
+  }
+
+  getBaseState() {
+    return this.state;
   }
 }
 

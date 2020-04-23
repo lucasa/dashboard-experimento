@@ -1,16 +1,21 @@
 import React from "react";
 import ReactPlayer from "react-player";
+import BaseCard from "./BaseCard";
 
-export class VideoCard extends React.Component {
+export class VideoCard extends BaseCard {
   constructor(props) {
     super(props);
+    const parentState = super.getBaseState();
     this.state = {
+      ...parentState,
       url: props.url
     };
   }
 
   render() {
-    return <ReactPlayer url={this.state.url} playing="false" />;
+    return (
+      <ReactPlayer url={this.state.url} playing={false} controls={false} />
+    );
   }
 }
 

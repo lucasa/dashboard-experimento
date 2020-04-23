@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import loadable from "@loadable/component";
 import Loadable from "react-loadable";
+import ComponentTree from "react-component-tree";
 
 const LoadingComponent = props => {
   if (props.isLoading) {
@@ -18,6 +18,7 @@ const LoadingComponent = props => {
     return null;
   }
 };
+// classe de widgets que faz carregamento (import) dinâmico do código JS componente
 export default function Widget({
   title,
   tag,
@@ -26,6 +27,12 @@ export default function Widget({
   ...othersProps
 }) {
   console.log("Widget", { title, tag, path, childProps, othersProps });
+
+  const serialize = () => {
+    const name = this.displayName || this.name || this.constructor.name;
+    const data = ComponentTree.serialize(this);
+    return { name, data };
+  };
 
   const LazyComponent = Loadable({
     loader: () => {
