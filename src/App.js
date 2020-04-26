@@ -1,4 +1,5 @@
 import * as React from "react";
+import PropTypes from "prop-types";
 import { NavLink, Redirect, Route, Switch } from "react-router-dom";
 
 import GutembergEditor from "./GutemberdEditor";
@@ -8,50 +9,184 @@ import LocalStorageGridLayout from "./code/LocalStorageGridLayout";
 import Chart from "./code/Chart";
 import HorizontalFlow from "./instagram/HorizontalFlow";
 import Dashboard from "./dashboard/Dashboard";
+import InfiniteDashboard from "./dashboard/InfiniteDashboard";
+import StyledCards from "./StyledCards";
+import {
+  Root,
+  Header,
+  Sidebar,
+  CollapseBtn,
+  CollapseIcon,
+  SidebarTrigger,
+  SidebarTriggerIcon,
+  Content,
+  Footer
+} from "@mui-treasury/layout";
+import { ContentMockUp } from "@mui-treasury/mockup/layout";
+import {
+  defaultLayoutPreset,
+  standardLayoutPreset,
+  fixedLayoutPreset,
+  contentBasedLayoutPreset,
+  cozyLayoutPreset,
+  muiTreasuryPreset
+} from "@mui-treasury/layout/presets";
+import { createMuiTheme } from "@material-ui/core/styles";
+import { Toolbar } from "@material-ui/core";
+import MenuJson from "./layout/MenuJson";
+import HeaderJson from "./layout/HeaderJson";
+import NavHeaderJson from "./layout/NavHeaderJson";
+import FooterJson from "./layout/FooterJson";
 
 import "./App.css";
 
+const presets = {
+  createDefaultLayout: defaultLayoutPreset,
+  createStandardLayout: standardLayoutPreset,
+  createFixedLayout: fixedLayoutPreset,
+  createContentBasedLayout: contentBasedLayoutPreset,
+  createCozyLayout: cozyLayoutPreset,
+  createMuiTreasuryLayout: muiTreasuryPreset
+};
+
+/* const Sidebar2 = ({ items }) => {
+  return (
+    <div className="sidebar">
+      <List disablePadding dense>
+        {items.map(({ label, name, items: subItems, ...rest }) => (
+          <ListItem style={{ paddingLeft: 18 }} key={name} button {...rest}>
+            <ListItemText>{label}</ListItemText>
+            {Array.isArray(subItems) ? (
+              <List disablePadding>
+                {subItems.map(subItem => (
+                  <ListItem key={subItem.name} button>
+                    <ListItemText className="sidebar-item-text">
+                      {subItem.label}
+                    </ListItemText>
+                  </ListItem>
+                ))}
+              </List>
+            ) : null}
+          </ListItem>
+        ))}
+      </List>
+    </div>
+  );
+}; */
+
+const defaultMenuHeader = [
+  { route: "/dashboard", title: "Dashboard" },
+  { route: "/experimento", title: "Experimento" },
+  { route: "/editor", title: "GutembergEditor" },
+  { route: "/code/grid", title: "Chart Grid" },
+  { route: "/code/locallayout", title: "Local Storage" },
+  { route: "/instagram", title: "Instagram" },
+  { route: "/styled", title: "StyledCards" },
+  { route: "/infinite", title: "Infinite" }
+];
+
+const defaultMenuSidebar = [
+  {
+    title: "Filtrar Assuntos",
+    icon: "folder"
+  },
+  {
+    title: "Adiciona Fonte",
+    icon: "AddToQueue"
+  },
+  {
+    title: "Conteúdos Populares",
+    icon: "star"
+  },
+  {
+    title: "Mais Recentes",
+    icon: "schedule"
+  },
+  {
+    title: "Adicionar Conteúdo Externo",
+    icon: "publish"
+  },
+  {
+    title: "Backup",
+    icon: "backup"
+  },
+  {
+    title: "Lixeira",
+    icon: "delete"
+  }
+];
+
 class App extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      menuHeader: defaultMenuHeader,
+      menuSidebar: defaultMenuSidebar
+    };
+  }
+
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <h1 className="App-title">Experimento Interface Painéis</h1>
-          <menu>
-            <NavLink to="/dashboard">Dashboard</NavLink>
-            <NavLink to="/experimento">Experimento</NavLink>
-            <NavLink to="/editor">GutembergEditor</NavLink>
-            <NavLink to="/code/grid">Chart Grid</NavLink>
-            <NavLink to="/code/locallayout"> Local Storage</NavLink>
-            <NavLink to="/instagram">Instagram</NavLink>
-          </menu>
-        </header>
-        <section>
-          <Switch>
-            <Route path="/editor" component={GutembergEditor} />
-            <Route path="/experimento" component={Experimento} />
-            <Route path="/dashboard" component={Dashboard} />
-            <Route
-              path="/code/grid"
-              component={() => {
-                return (
-                  <Grid
-                    layouts={this.layouts}
-                    items={this.items}
-                    onItemClick={this.onItemClick}
-                  />
-                );
-              }}
-            />
-            <Route
-              path="/code/locallayout"
-              component={LocalStorageGridLayout}
-            />
-            <Route path="/instagram" component={HorizontalFlow} />
-            <Redirect to="/dashboard" />
-          </Switch>
-        </section>
-      </div>
+      <Root presets={presets[0]}>
+        {({ sidebarStyles, headerStyles }) => (
+          <>
+            <Header>
+              <Toolbar>
+                <SidebarTrigger className={headerStyles.leftTrigger}>
+                  {/* headerStyles is from Root function as a child */}
+                  <SidebarTriggerIcon />
+                </SidebarTrigger>
+                <HeaderJson items={this.state.menuHeader} />
+              </Toolbar>
+            </Header>
+            <Sidebar>
+              <div className={sidebarStyles.container}>
+                <NavHeaderJson />
+                <MenuJson items={this.state.menuSidebar} />
+              </div>
+              <CollapseBtn className={sidebarStyles.collapseBtn}>
+                <CollapseIcon />
+              </CollapseBtn>
+            </Sidebar>
+            <Content>
+              <div className="App">
+                <header className="App-header" />
+                <section>
+                  <Switch>
+                    <Route path="/editor" component={GutembergEditor} />
+                    <Route path="/experimento" component={Experimento} />
+                    <Route path="/dashboard" component={Dashboard} />
+                    <Route
+                      path="/code/grid"
+                      component={() => {
+                        return (
+                          <Grid
+                            layouts={this.layouts}
+                            items={this.items}
+                            onItemClick={this.onItemClick}
+                          />
+                        );
+                      }}
+                    />
+                    <Route
+                      path="/code/locallayout"
+                      component={LocalStorageGridLayout}
+                    />
+                    <Route path="/instagram" component={HorizontalFlow} />
+                    <Route path="/styled" component={StyledCards} />
+                    <Route path="/infinite" component={InfiniteDashboard} />
+                    <Redirect to="/dashboard" />
+                  </Switch>
+                </section>
+              </div>
+            </Content>
+            <Footer>
+              <FooterJson />
+            </Footer>
+          </>
+        )}
+      </Root>
     );
   }
 

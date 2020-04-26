@@ -2,7 +2,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import React, { Component } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import StackGrid, { transitions, easings } from "react-stack-grid";
 import DemoControl from "../instagram/DemoControl";
@@ -12,7 +12,22 @@ import "../instagram/normalize.css";
 import "../instagram/rc-slider.css";
 import "../instagram/style.css";
 
+//const PostCard = React.createElement("div", {});
+
+const shuffleArray = array => {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+};
+
 const defaultContent = [
+  {
+    title: "card",
+    path: "./PostCard",
+    tag: "PostCard",
+    properties: {}
+  },
   {
     title: "A video...",
     path: "./VideoCard",
@@ -44,7 +59,7 @@ const defaultContent = [
   }
 ];
 
-class Dashboard extends Component {
+class Dashboard extends React.Component {
   constructor(props) {
     super(props);
 
@@ -59,17 +74,11 @@ class Dashboard extends Component {
   }
 
   shuffleItems = () => {
-    const newItems = [...this.state.content];
-    let i = newItems.length;
-
-    while (i) {
-      const j = Math.floor(Math.random() * i);
-      const t = newItems[--i]; // eslint-disable-line no-plusplus
-      newItems[i] = newItems[j];
-      newItems[j] = t;
+    const components = this.state.content;
+    if (components) {
+      shuffleArray(components);
+      this.setState({ content: components });
     }
-
-    this.setState({ content: newItems });
   };
 
   prependItem = item => {
@@ -157,18 +166,20 @@ class Dashboard extends Component {
             console.log("[DEMO] `onLayout()` has been called."); // eslint-disable-line
           }}
         >
-          {content.map(config => {
-            let { title, tag, path, properties } = config;
-            return (
-              <Widget
-                key={title}
-                title={title}
-                tag={tag}
-                path={path}
-                childProps={properties}
-              />
-            );
-          })}
+          {content &&
+            content.map(config => {
+              console.log("rendering", config);
+              let { title, tag, path, properties } = config;
+              return (
+                <Widget
+                  key={title}
+                  title={title}
+                  tag={tag}
+                  path={path}
+                  childProps={properties}
+                />
+              );
+            })}
         </StackGrid>
       </div>
     );

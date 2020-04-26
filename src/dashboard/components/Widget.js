@@ -27,6 +27,7 @@ class Widget extends React.Component {
   constructor(props) {
     super(props);
     const { title, tag, path, childProps, ...othersProps } = props;
+    console.log("Widget created", props);
 
     const loader = () => {
       //console.log("Loadable importing...", path);
@@ -36,10 +37,9 @@ class Widget extends React.Component {
     };
 
     const render = (loaded, ps) => {
-      //console.log("LazyComponent loaded", loaded);
+      //console.log("LazyComponent.render loaded", loaded);
       let Component = loaded[tag];
-      // loaded.namedExport;
-      //console.log("LazyComponent", { Component, ps });
+      console.log("LazyComponent.render component", { Component, ps });
       return <Component {...ps} />;
     };
 
@@ -62,13 +62,13 @@ class Widget extends React.Component {
     //const name = this.displayName || this.name || this.constructor.name;
     const raw = ComponentTree.serialize(this);
     const dump = JSON.stringify(raw || "");
-    console.log("Widget serialize dump string: ", dump.length, dump);
+    //console.log("Widget serialize dump string: ", dump.length, dump);
     return dump;
   }
 
   render() {
     const dump = this.serialize();
-    //console.log("Widget.render state", this.state);
+    console.log("Widget.render state", this.state);
     const { title, tag, path, childProps, othersProps } = this.state;
     return (
       <div

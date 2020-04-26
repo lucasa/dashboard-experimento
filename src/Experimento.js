@@ -1,12 +1,35 @@
 import React from "react";
+import PropTypes from "prop-types";
+
 import GridLayout from "./GridLayout";
-// import OrderBook from '../../OrderBook';
-// import ConnectedBlotter from "../../ConnectedBlotter";
-// import LivePrices from "../../LivePrices";
-import Widget from "./Widget";
 import GutembergEditor from "./GutemberdEditor";
 
 import "./dashboard.css";
+
+const Widget = ({ title, children }) => {
+  return (
+    <div
+      className="widget"
+      style={{
+        cursor: "drag",
+        border: "1px solid black",
+        width: "100%",
+        height: "100%",
+        borderTopRightRadius: "15px",
+        borderTopLeftRadius: "15px",
+        borderBottomRightRadius: "15px",
+        borderBottomLeftRadius: "15px"
+      }}
+    >
+      {children}
+    </div>
+  );
+};
+
+Widget.propTypes = {
+  title: PropTypes.string,
+  children: PropTypes.element
+};
 
 const Box = props => {
   const style = Object.assign(
