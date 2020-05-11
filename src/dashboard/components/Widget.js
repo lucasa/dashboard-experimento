@@ -4,6 +4,8 @@ import Loadable from "react-loadable";
 import ComponentTree from "react-component-tree";
 import QRCode from "qrcode.react";
 
+import "./widget.scss";
+
 const LoadingComponent = props => {
   if (props.isLoading) {
     if (props.timedOut) {
@@ -26,8 +28,8 @@ var LazyComponent = () => <div />;
 class Widget extends React.Component {
   constructor(props) {
     super(props);
-    const { title, tag, path, childProps, ...othersProps } = props;
-    console.log("Widget created", props);
+    const { title, tag, path, childProps, wrapStyle } = props;
+    //console.log("Widget created", props);
 
     const loader = () => {
       //console.log("Loadable importing...", path);
@@ -39,7 +41,7 @@ class Widget extends React.Component {
     const render = (loaded, ps) => {
       //console.log("LazyComponent.render loaded", loaded);
       let Component = loaded[tag];
-      console.log("LazyComponent.render component", { Component, ps });
+      //console.log("LazyComponent.render component", { Component, ps });
       return <Component {...ps} />;
     };
 
@@ -54,7 +56,7 @@ class Widget extends React.Component {
       tag,
       path,
       childProps,
-      othersProps
+      wrapStyle
     };
   }
 
@@ -68,33 +70,39 @@ class Widget extends React.Component {
 
   render() {
     const dump = this.serialize();
-    console.log("Widget.render state", this.state);
-    const { title, tag, path, childProps, othersProps } = this.state;
+    //console.log("Widget.render state", this.state);
+    const { title, tag, path, childProps, wrapStyle } = this.state;
     return (
       <div
-        className="widget"
+        className="widget child-content"
         style={{
           cursor: "drag",
-          border: "1px solid black",
+          border: "3px solid black",
           width: "100%",
           height: "100%",
           borderTopRightRadius: "0px",
           borderTopLeftRadius: "0px",
           borderBottomRightRadius: "0px",
-          borderBottomLeftRadius: "0px"
+          borderBottomLeftRadius: "0px",
+          ...wrapStyle
         }}
-        {...othersProps}
       >
-        <h3>
-          {tag} - {title}
-        </h3>
-        <textarea
-          value={JSON.stringify(childProps)}
-          style={{ width: "100%" }}
-        />
-        <LazyComponent {...childProps} />
-        <h4>code: {path}</h4>
-        <QRCode value={dump} />
+        <div className="metadata-top">
+          <div className="title">{title}</div>
+        </div>
+
+        <LazyComponent key={"widget-key-" + title} {...childProps} />
+
+        <div className="metadata-bottom">
+          <output>
+            {tag} - {path}
+          </output>
+          <QRCode key={"widget-qrcode-" + title} value={dump} />
+          <textarea
+            value={childProps ? JSON.stringify(childProps) : ""}
+            style={{ width: "100%" }}
+          />
+        </div>
       </div>
     );
   }

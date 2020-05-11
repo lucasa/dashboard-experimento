@@ -10,7 +10,10 @@ import Chart from "./code/Chart";
 import HorizontalFlow from "./instagram/HorizontalFlow";
 import Dashboard from "./dashboard/Dashboard";
 import InfiniteDashboard from "./dashboard/InfiniteDashboard";
+import GridDashboard from "./dashboard/GridDashboard";
 import StyledCards from "./StyledCards";
+import Litegraph from "./pipeline/Litegraph";
+
 import {
   Root,
   Header,
@@ -82,7 +85,9 @@ const defaultMenuHeader = [
   { route: "/code/locallayout", title: "Local Storage" },
   { route: "/instagram", title: "Instagram" },
   { route: "/styled", title: "StyledCards" },
-  { route: "/infinite", title: "Infinite" }
+  { route: "/infinite", title: "Infinite" },
+  { route: "/griddashboard", title: "Grid-Dashboard" },
+  { route: "/litegraph", title: "Litegraph.js" }
 ];
 
 const defaultMenuSidebar = [
@@ -176,14 +181,16 @@ class App extends React.Component {
                     <Route path="/instagram" component={HorizontalFlow} />
                     <Route path="/styled" component={StyledCards} />
                     <Route path="/infinite" component={InfiniteDashboard} />
+                    <Route path="/griddashboard" component={GridDashboard} />
+                    <Route path="/litegraph" component={Litegraph} />
                     <Redirect to="/dashboard" />
                   </Switch>
                 </section>
               </div>
             </Content>
-            <Footer>
+            {/* <Footer>
               <FooterJson />
-            </Footer>
+            </Footer> */}
           </>
         )}
       </Root>

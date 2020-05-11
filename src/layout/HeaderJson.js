@@ -65,14 +65,23 @@ const styles = ({ spacing, transitions, breakpoints, palette, shape }) => ({
 
 const HeaderEx = ({ classes, screen, items }) => (
   <>
-    <Typography noWrap color={"textSecondary"} className={classes.header}>
+    <Typography
+      key="header-title"
+      noWrap
+      color={"textSecondary"}
+      className={classes.header}
+    >
       Experimento Dashboard
     </Typography>
     <div className={classes.grow} />
     <div className={classes.search}>
       {items.map(m => {
         return (
-          <Link to={m.route} component={Button}>
+          <Link
+            key={"header-menu-link-" + m.title}
+            to={m.route}
+            component={Button}
+          >
             {m.title}
           </Link>
         );

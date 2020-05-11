@@ -14,7 +14,13 @@ export class VideoCard extends BaseCard {
 
   render() {
     return (
-      <ReactPlayer url={this.state.url} playing={false} controls={false} />
+      <ReactPlayer
+        width="100%"
+        height="100%"
+        url={this.state.url}
+        playing={false}
+        controls={false}
+      />
     );
   }
 }
