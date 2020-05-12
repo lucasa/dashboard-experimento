@@ -8,6 +8,19 @@ import { FindReact, TraveseReactElementTree } from "./util/dom-util.js";
 import Widget from "./components/Widget";
 import "./grid.css";
 
+
+const Box = props => {
+  const style = Object.assign(
+    {
+      background: props.color || "green",
+      width: "350px",
+      height: "450px"
+    },
+    props.style || {}
+  );
+  return <div {...props} style={style} />;
+};
+
 const sizes = [
   { columns: 1, gutter: 10 },
   { mq: "550px", columns: 2, gutter: 30 },
@@ -30,8 +43,8 @@ const defaultContent = [
     path: "./VideoCard",
     tag: "VideoCard",
     properties: { url: "https://www.youtube.com/watch?v=OslN5mxWZi8" }
-  }
-  /* {
+  },
+  {
     title: "gfycat",
     path: "./EmbedCard",
     tag: "EmbedCard",
@@ -53,28 +66,21 @@ const defaultContent = [
       url:
         "https://www.google.com/maps/place/Sharksushi/@-30.0714187,-51.2581439,13z/data=!4m8!1m2!2m1!1sshark+sushi!3m4!1s0x95197810db64f825:0x2392d6944dcb471e!8m2!3d-30.0534025!4d-51.1921381"
     }
-  } */
-  /*  {
+  },
+  {
     title: "box",
     tag: "Box",
-    element: Box,
+    component: Box,
     properties: {
-      color: "red"
+      color: "red",
+      style: {
+        width: 400,
+        height: 400
+      }
     }
-  }*/
+  }
 ];
 
-const Box = props => {
-  const style = Object.assign(
-    {
-      background: props.color || "green",
-      maxWidth: "350px",
-      maxHeight: "450px"
-    },
-    props.style || {}
-  );
-  return <div {...props} style={style} />;
-};
 
 const wrapStyle = {
   overflow: "scroll",
@@ -108,7 +114,7 @@ class GridDashboard extends React.Component {
 
     for (let i = 0; i < num; ++i) {
       const k = Math.floor(Math.random() * keys.length);
-      const { title, tag, path, properties } = defaultContent[k];
+      const { title, tag, path, component, properties } = defaultContent[k];
       items.push(
         <Zoom key={"zoom-widget-" + this.start + i}>
           <Widget
@@ -117,6 +123,7 @@ class GridDashboard extends React.Component {
             title={title}
             tag={tag}
             path={path}
+            component={component}
             childProps={properties}
             wrapStyle={wrapStyle}
           />

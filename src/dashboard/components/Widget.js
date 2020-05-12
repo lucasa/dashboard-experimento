@@ -1,4 +1,4 @@
-import React from "react";
+import React, {Suspense} from "react";
 import PropTypes from "prop-types";
 import Loadable from "react-loadable";
 import ComponentTree from "react-component-tree";
@@ -22,39 +22,57 @@ const LoadingComponent = props => {
   }
 };
 
-var LazyComponent = () => <div />;
+function DynamicLoader({path, component, ...childProps}) {
+  const LazyComponent = path && React.lazy(() => import(`${path}`)) || component;
+  if (path) {
+    //console.log('Width.DynamicLoader rendering lazy path', path, childProps);
+    return (
+      <Suspense fallback={<div>Loading...</div>}>
+        <LazyComponent {...childProps}/>
+      </Suspense>
+    )
+  } else {
+    //console.log('Width.DynamicLoader rendering component', component, childProps);
+    return <LazyComponent {...childProps}/>
+  };
+}
 
 // classe de widgets que faz carregamento (import) dinâmico do código JS componente
 class Widget extends React.Component {
   constructor(props) {
     super(props);
-    const { title, tag, path, childProps, wrapStyle } = props;
-    //console.log("Widget created", props);
+    const { title, tag, path, component, childProps, wrapStyle } = props;
+    console.log("Widget created props", props);
 
-    const loader = () => {
+    /* const loader = () => {
       //console.log("Loadable importing...", path);
-      const imported = import(path);
-      //console.log("Loadable imported", imported);
-      return imported;
-    };
+      if (path) {
+        const imported = import(path);
+        console.log("Loadable imported", imported);
+        return imported;
+      } else {
+        return new Promise(() => component);
+      }
+    }; */
 
-    const render = (loaded, ps) => {
+    /* const render = (loaded, ps) => {
       //console.log("LazyComponent.render loaded", loaded);
       let Component = loaded[tag];
       //console.log("LazyComponent.render component", { Component, ps });
       return <Component {...ps} />;
-    };
+    }; */
 
-    LazyComponent = Loadable({
+    /*LazyComponent = Loadable({
       loading: LoadingComponent,
       loader: loader,
       render: render
-    });
+    });*/
 
     this.state = {
       title,
       tag,
       path,
+      component,
       childProps,
       wrapStyle
     };
@@ -70,8 +88,8 @@ class Widget extends React.Component {
 
   render() {
     const dump = this.serialize();
-    //console.log("Widget.render state", this.state);
-    const { title, tag, path, childProps, wrapStyle } = this.state;
+    console.log("Widget.render state", this.state);
+    const { title, tag, path, component, childProps, wrapStyle } = this.state;
     return (
       <div
         className="widget child-content"
@@ -91,11 +109,11 @@ class Widget extends React.Component {
           <div className="title">{title}</div>
         </div>
 
-        <LazyComponent key={"widget-key-" + title} {...childProps} />
+        <DynamicLoader key={"widget-key-" + title} path={path} component={component} {...childProps} />
 
         <div className="metadata-bottom">
           <output>
-            {tag} - {path}
+            {tag} - {path || component.type}
           </output>
           <QRCode key={"widget-qrcode-" + title} value={dump} />
           <textarea

@@ -56,13 +56,14 @@ const createNode = (type, params) => {
 //   callback = LGraphCanvas.onMenuAdd;
 // }
 
-class Workspace extends React.Component {
+class LiteGraphWorkspace extends React.Component {
   componentDidMount() {
-    window.addEventListener("resize", this.resize);
+    //window.addEventListener("resize", this.resize);
 
     this.graph = new LiteGraph.LGraph();
-    console.log("graph", this.graph);
     this.canvas = new LiteGraph.LGraphCanvas("#canvas-litegraph", this.graph);
+    this.graph.start();
+    console.log("graph started", this.graph);
 
     // const output = document.createElement("canvas");
     // const outputContext = (this.outputContext = output.getContext("2d"));
@@ -79,12 +80,11 @@ class Workspace extends React.Component {
     //LiteGraph.registered_node_types = {};
     //LiteGraph.searchbox_extras = {};
     //LiteGraph.registerNodeType("own node/item", MyNode);
-    this.graph.start();
   }
 
   resize() {
-    console.log("window.LiteGraph", window.LiteGraph);
-    console.log("window.LiteGraph.LGraphCanvas", window.LiteGraph.LGraphCanvas);
+    console.log("window.LiteGraph", LiteGraph);
+    console.log("window.LiteGraph.LGraphCanvas", LiteGraph.LGraphCanvas);
     if (this.canvas) {
       const canvas = this.canvas;
       console.log("canvas", canvas);
@@ -103,4 +103,4 @@ class Workspace extends React.Component {
   }
 }
 
-export default Workspace;
+export default LiteGraphWorkspace;

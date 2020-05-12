@@ -1,6 +1,7 @@
-import { Component, Fragment } from "react";
+import React, { Component, Fragment } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import faker from "faker";
 
 const MAGIC_NUMBER = 3;
 const CardTrack = styled.div`
@@ -163,7 +164,7 @@ const Button = styled.button`
   display: inline-flex;
   justify-content: center;
   height: 44px;
-  left: 50%
+  left: 50%;
   margin: 30px 20px 0 20px;
   top: 50%;
   transition: background 0.5s;

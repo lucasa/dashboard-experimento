@@ -32,7 +32,7 @@ function FindReact(dom, traverseUp = 0) {
   return compFiber.stateNode;
 }
 
-const TraveseReactDOMTree = node =>
+/* const TraveseReactDOMTree = node =>
   traverse(node, {
     DOMElement(path) {
       if (path.node.type === "div") {
@@ -48,7 +48,7 @@ const TraveseReactDOMTree = node =>
         ...path.traverseChildren()
       );
     }
-  });
+}); */
 
 function TraveseReactElementTree(rootNode) {
   console.log("TraveseReactElementTree rootNode", rootNode);
