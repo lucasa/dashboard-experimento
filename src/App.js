@@ -12,7 +12,7 @@ import Dashboard from "./dashboard/Dashboard";
 import InfiniteDashboard from "./dashboard/InfiniteDashboard";
 import GridDashboard from "./dashboard/GridDashboard";
 import StyledCards from "./StyledCards";
-import Litegraph from "./pipeline/Litegraph";
+import LitegraphWorkspace from "./pipeline/LitegraphWorkspace";
 
 import {
   Root,
@@ -182,7 +182,7 @@ class App extends React.Component {
                     <Route path="/styled" component={StyledCards} />
                     <Route path="/infinite" component={InfiniteDashboard} />
                     <Route path="/griddashboard" component={GridDashboard} />
-                    <Route path="/litegraph" component={Litegraph} />
+                    <Route path="/litegraph" component={LitegraphWorkspace} />
                     <Redirect to="/dashboard" />
                   </Switch>
                 </section>

@@ -42,7 +42,7 @@ class Widget extends React.Component {
   constructor(props) {
     super(props);
     const { title, tag, path, component, childProps, wrapStyle } = props;
-    console.log("Widget created props", props);
+    //console.log("Widget created props", props);
 
     /* const loader = () => {
       //console.log("Loadable importing...", path);
@@ -88,7 +88,7 @@ class Widget extends React.Component {
 
   render() {
     const dump = this.serialize();
-    console.log("Widget.render state", this.state);
+    //console.log("Widget.render state", this.state);
     const { title, tag, path, component, childProps, wrapStyle } = this.state;
     return (
       <div

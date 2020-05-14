@@ -3,10 +3,14 @@ import { render, findDOMNode } from "react-dom";
 import Zoom from "react-reveal/Zoom";
 import Masonry from "react-masonry-infinite";
 import SplitPane, { Pane } from "react-split-pane";
+import { Resizer } from "react-split-pane";
 
 import { FindReact, TraveseReactElementTree } from "./util/dom-util.js";
 import Widget from "./components/Widget";
+import LitegraphWorkspace from "../pipeline/LitegraphWorkspace.js";
+
 import "./grid.css";
+import "./split.css";
 
 
 const Box = props => {
@@ -89,6 +93,8 @@ const wrapStyle = {
   boxShadow: "4px 8px 16px 0 rgba(0,0,0,0.7)"
 };
 
+
+
 class GridDashboard extends React.Component {
   start = 0;
   state = {
@@ -141,10 +147,16 @@ class GridDashboard extends React.Component {
   }
 
   componentDidUpdate() {
-    console.log("GridDashboard is updated");
+    console.log("GridDashboard is updated", this.layout);
     if (this.layout) {
       const renderedlayout = this.layout;
-      TraveseReactElementTree(renderedlayout);
+      let elements = TraveseReactElementTree(renderedlayout);
+      console.log();
+      if (!this.createdReactNodes) {
+        this.createdReactNodes = true;
+        console.log('creating the react litegraph node of the grid...');
+        this.litegraphWorkspace.addNodeReactElement(renderedlayout, 'components/infinitegrid', 'Infinite Grid', 'A react component that renders a infinite grid');
+      }
     }
   }
 
@@ -154,14 +166,18 @@ class GridDashboard extends React.Component {
   render() {
     //console.log("rendering children", this.state.elements);
     //console.log("render layout =", this.layout);
+
     return (
       <>
-        {/*< SplitPane
+        {/* < SplitPane
           split="horizontal"
           minSize={200}
-          defaultSize={500}
-          primary="second"
+          defaultSize="200"
         > */}
+        <LitegraphWorkspace
+          ref={lw => { this.litegraphWorkspace = this.litegraphWorkspace || lw }}
+          style={{ backgroundColor: "green", minHeight: 300, height: '100%', width: '100%' }} />
+        {/*<div style={{ backgroundColor: "pink", minHeight:600, width:'100%' }}></div>*/}
         <Masonry
           key="mansory-layout"
           ref={c => (this.layout = this.layout || c)}
@@ -179,7 +195,7 @@ class GridDashboard extends React.Component {
         >
           {this.state.elements}
         </Masonry>
-        {/* </SplitPane> */}
+        {/*</SplitPane>*/}
       </>
     );
   }

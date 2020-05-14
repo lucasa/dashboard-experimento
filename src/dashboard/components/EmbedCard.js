@@ -15,7 +15,7 @@ export class EmbedCard extends BaseCard {
   }
 
   render() {
-    console.log("<Embed> url", this.state.url);
+    //console.log("<Embed> url", this.state.url);
     return <Embed url={this.state.url} />;
   }
 }

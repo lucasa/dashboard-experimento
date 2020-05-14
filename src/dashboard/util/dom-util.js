@@ -51,7 +51,7 @@ function FindReact(dom, traverseUp = 0) {
 }); */
 
 function TraveseReactElementTree(rootNode) {
-  console.log("TraveseReactElementTree rootNode", rootNode);
+  //console.log("TraveseReactElementTree rootNode", rootNode);
   return traverse(rootNode, {
     ComponentElement(path) {
       switch (path.node.type) {
@@ -60,8 +60,8 @@ function TraveseReactElementTree(rootNode) {
           const props = path.node.props;
           const children = path.node.children;
           //console.log("traversing path", path);
-          console.log("node state", data);
-          console.log("node props", props);
+          //console.log("node state", data);
+          //console.log("node props", props);
           //console.log("traversing node children", children);
           break;
         }
