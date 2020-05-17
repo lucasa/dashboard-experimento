@@ -51,27 +51,25 @@ function FindReact(dom, traverseUp = 0) {
 }); */
 
 function TraveseReactElementTree(rootNode) {
-  //console.log("TraveseReactElementTree rootNode", rootNode);
-  return traverse(rootNode, {
+  console.log("TraveseReactElementTree rootNode", rootNode);
+  const nodes = [];
+  traverse(rootNode, {
     ComponentElement(path) {
-      switch (path.node.type) {
-        case Node: {
-          const data = path.node.state;
-          const props = path.node.props;
-          const children = path.node.children;
-          //console.log("traversing path", path);
-          //console.log("node state", data);
-          //console.log("node props", props);
-          //console.log("traversing node children", children);
-          break;
-        }
-        default: {
-          break;
-        }
-      }
+      console.log("traversing path", path.kindOf(), path);
+
+      const data = path.node.state;
+      const props = path.node.props;
+      const children = path.node.children;
+      console.log("node state", data);
+      console.log("node props", props);
+      console.log("traversing node children", children);
+      nodes.push(path.node);
+
       path.traverseChildren();
     }
   });
+
+  return nodes;
 }
 
 export { FindReact, TraveseReactElementTree };

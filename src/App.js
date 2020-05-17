@@ -13,6 +13,7 @@ import InfiniteDashboard from "./dashboard/InfiniteDashboard";
 import GridDashboard from "./dashboard/GridDashboard";
 import StyledCards from "./StyledCards";
 import LitegraphWorkspace from "./pipeline/LitegraphWorkspace";
+import { FindReact, TraveseReactElementTree } from "./util/dom-util.js";
 
 import {
   Root,
@@ -125,13 +126,62 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
+    this.reactElements = [];
+
     this.state = {
       menuHeader: defaultMenuHeader,
       menuSidebar: defaultMenuSidebar
     };
   }
 
+  componentDidMount() {
+    console.log('App mounted', this);
+  }
+
+  componentDidUpdate() {
+    console.log('App updated', this);
+    // if (this.Content) {
+    //   if (!this.createdReactNodes) {
+    //     console.log('transverse loading from', this.Content);
+    //     let elements = TraveseReactElementTree(this.Content, [GridDashboard]);
+    //     console.log('transverse detected elements', elements);
+    //     this.createdReactNodes = true;
+    //     //console.log('creating the react litegraph node of the grid...');
+    //     //this.litegraphWorkspace.addReactElementAsNode(renderedlayout, 'components/infinitegrid', 'Infinite Grid', 'A react component that renders a infinite grid');
+    //   }
+    // }
+  }
+
+  recursiveCollectReactComponents(element, type) {
+    if (element) {
+      //console.log('transverse loading from', type, element);
+      let colleted = TraveseReactElementTree(element);
+      //console.log('transverse detected elements', type, colleted);
+      colleted.map(e => {
+        console.log("********* Element: ", type, e.constructor.name, e);
+        this.reactElements.push({
+          element: e,
+          type: 'webcomponents/' + type,
+          title: type,
+          desc: type
+        });
+      });
+    }
+  }
+
+  initLitegraph(lgw) {
+    this.litegraphWorkspace = lgw;
+    if (this.litegraphWorkspace) {
+      console.log('loading react elements into litegraph', this.litegraphWorkspace);
+      for (const re of this.reactElements) {
+        console.log('loading element', re);
+        this.litegraphWorkspace.addReactElementAsNode(re.element, re.type, re.title, re.desc);
+      }
+    }
+  }
+
   render() {
+    console.log('App Rendering...');
     return (
       <Root presets={presets[0]}>
         {({ sidebarStyles, headerStyles }) => (
@@ -157,11 +207,18 @@ class App extends React.Component {
             <Content>
               <div className="App">
                 <header className="App-header" />
+                <section style={{ height: 250 }}>
+                  <LitegraphWorkspace key="Litegraph" ref={w => this.initLitegraph(w)} />
+                </section>
                 <section>
                   <Switch>
-                    <Route path="/editor" component={GutembergEditor} />
+                    <Route path="/editor" component={() => {
+                      const c = new GutembergEditor();
+                      this.recursiveCollectReactComponents(c, 'GutembergEditor');
+                      return c;
+                    }} />
                     <Route path="/experimento" component={Experimento} />
-                    <Route path="/dashboard" component={Dashboard} />
+                    <Route path="/dashboard" component={() => <Dashboard ref={d => this.recursiveCollectReactComponents(d, 'Dashboard')} />} />
                     <Route
                       path="/code/grid"
                       component={() => {
@@ -181,7 +238,7 @@ class App extends React.Component {
                     <Route path="/instagram" component={HorizontalFlow} />
                     <Route path="/styled" component={StyledCards} />
                     <Route path="/infinite" component={InfiniteDashboard} />
-                    <Route path="/griddashboard" component={GridDashboard} />
+                    <Route path="/griddashboard" component={() => <GridDashboard key="grid" ref={g => this.recursiveCollectReactComponents(g, 'Grid-Dashboard')} />} />
                     <Route path="/litegraph" component={LitegraphWorkspace} />
                     <Redirect to="/dashboard" />
                   </Switch>

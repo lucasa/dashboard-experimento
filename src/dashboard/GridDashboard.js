@@ -2,10 +2,6 @@ import * as React from "react";
 import { render, findDOMNode } from "react-dom";
 import Zoom from "react-reveal/Zoom";
 import Masonry from "react-masonry-infinite";
-import SplitPane, { Pane } from "react-split-pane";
-import { Resizer } from "react-split-pane";
-
-import { FindReact, TraveseReactElementTree } from "./util/dom-util.js";
 import Widget from "./components/Widget";
 import LitegraphWorkspace from "../pipeline/LitegraphWorkspace.js";
 
@@ -36,7 +32,7 @@ const sizes = [
 ];
 
 const defaultContent = [
-  {
+ /* {
     title: "card",
     path: "./PostCard",
     tag: "PostCard",
@@ -70,7 +66,7 @@ const defaultContent = [
       url:
         "https://www.google.com/maps/place/Sharksushi/@-30.0714187,-51.2581439,13z/data=!4m8!1m2!2m1!1sshark+sushi!3m4!1s0x95197810db64f825:0x2392d6944dcb471e!8m2!3d-30.0534025!4d-51.1921381"
     }
-  },
+  },*/
   {
     title: "box",
     tag: "Box",
@@ -98,7 +94,8 @@ const wrapStyle = {
 class GridDashboard extends React.Component {
   start = 0;
   state = {
-    elements: []
+    elements: [],
+    sizes: sizes
   };
 
   constructor(props) {
@@ -117,7 +114,6 @@ class GridDashboard extends React.Component {
   loadItems(num) {
     const items = [];
     const keys = Object.keys(defaultContent);
-
     for (let i = 0; i < num; ++i) {
       const k = Math.floor(Math.random() * keys.length);
       const { title, tag, path, component, properties } = defaultContent[k];
@@ -147,16 +143,16 @@ class GridDashboard extends React.Component {
   }
 
   componentDidUpdate() {
-    console.log("GridDashboard is updated", this.layout);
+    //console.log("GridDashboard is updated", this.layout);
     if (this.layout) {
       const renderedlayout = this.layout;
-      let elements = TraveseReactElementTree(renderedlayout);
-      console.log();
-      if (!this.createdReactNodes) {
-        this.createdReactNodes = true;
-        console.log('creating the react litegraph node of the grid...');
-        this.litegraphWorkspace.addNodeReactElement(renderedlayout, 'components/infinitegrid', 'Infinite Grid', 'A react component that renders a infinite grid');
-      }
+      // let elements = TraveseReactElementTree(renderedlayout);
+      // console.log();
+      // if (!this.createdReactNodes) {
+      //   this.createdReactNodes = true;
+      //   console.log('creating the react litegraph node of the grid...');
+      //   this.litegraphWorkspace.addReactElementAsNode(renderedlayout, 'components/infinitegrid', 'Infinite Grid', 'A react component that renders a infinite grid');
+      // }
     }
   }
 
@@ -169,19 +165,13 @@ class GridDashboard extends React.Component {
 
     return (
       <>
-        {/* < SplitPane
-          split="horizontal"
-          minSize={200}
-          defaultSize="200"
-        > */}
-        <LitegraphWorkspace
+        {/* <LitegraphWorkspace
           ref={lw => { this.litegraphWorkspace = this.litegraphWorkspace || lw }}
-          style={{ backgroundColor: "green", minHeight: 300, height: '100%', width: '100%' }} />
-        {/*<div style={{ backgroundColor: "pink", minHeight:600, width:'100%' }}></div>*/}
+          style={{ backgroundColor: "green", minHeight: 300, height: '100%', width: '100%' }} /> */}
         <Masonry
           key="mansory-layout"
           ref={c => (this.layout = this.layout || c)}
-          sizes={sizes}
+          sizes={this.state.sizes}
           loader={<h2>loading...</h2>}
           hasMore={true}
           pack={true}
@@ -195,7 +185,6 @@ class GridDashboard extends React.Component {
         >
           {this.state.elements}
         </Masonry>
-        {/*</SplitPane>*/}
       </>
     );
   }
